@@ -1,0 +1,62 @@
+name: project-name
+
+services:
+  ###> doctrine/doctrine-bundle ###
+  database:
+    image: bitnami/mariadb:10.6.19
+    container_name: project-database
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD:-root_password}
+      - MARIADB_USER=${MARIADB_USER:-app}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD:-app_password}
+      - MARIADB_DATABASE=${MARIADB_DATABASE:-app}
+    volumes:
+      - database_data:/bitnami/mariadb
+    networks:
+      - project_network
+    ports:
+      - 3306:3306
+    restart: unless-stopped
+  ###< doctrine/doctrine-bundle ###
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.1
+    container_name: project-phpmyadmin
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=database
+      - PMA_USER=${MARIADB_USER:-app}
+      - PMA_PASSWORD=${MARIADB_PASSWORD:-app_password}
+    depends_on:
+      - database
+    networks:
+      - project_network
+    restart: unless-stopped
+
+  apache:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: project-apache
+    volumes:
+      - .:/var/www/
+      - ./docker/apache/apache.conf:/etc/apache2/sites-enabled/000-default.conf
+      - ./docker/apache/php.ini:/usr/local/etc/php/conf.d/php.custom.ini
+      - ./docker/apache/.htaccess:/var/www/public/.htaccess
+    ports:
+      - 8000:80
+    depends_on:
+      - database
+    networks:
+      - project_network
+    restart: unless-stopped
+
+networks:
+  project_network:
+    driver: bridge
+
+volumes:
+  database_data:
+    driver: local
