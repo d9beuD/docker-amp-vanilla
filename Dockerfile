@@ -32,13 +32,8 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
     pdo_mysql \
     zip
 
+# Installing Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Installation of Symfony CLI with cache cleaning
-RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash && \
-    apt-get install -y symfony-cli && \
-    symfony server:ca:install && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Configure Apache
 ADD docker/apache/entrypoint.sh /entrypoint.sh

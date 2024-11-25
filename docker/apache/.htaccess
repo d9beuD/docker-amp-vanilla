@@ -1,5 +1,6 @@
 #
-# EDIT ME IN `/docker/apache/.htaccess` ONLY
+# READ ME
+# Edit this file in `/docker/apache/.htaccess` ONLY
 #
 
 <IfModule mod_rewrite.c>
@@ -11,6 +12,7 @@
     RewriteCond %{HTTPS} off
     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^(.*)$ index.php [QSA,L]
+    # Redirect all requests to the router (opt-in by uncommenting the following lines)
+    # RewriteCond %{REQUEST_FILENAME} !-f
+    # RewriteRule ^(.*)$ index.php [QSA,L]
 </IfModule>
