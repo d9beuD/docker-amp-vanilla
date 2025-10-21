@@ -3,7 +3,7 @@ name: project-name
 services:
   ###> doctrine/doctrine-bundle ###
   database:
-    image: bitnami/mariadb:10.6.19
+    image: mariadb:12.0.2-ubi10
     container_name: project-database
     environment:
       - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD:-root_password}
@@ -11,7 +11,7 @@ services:
       - MARIADB_PASSWORD=${MARIADB_PASSWORD:-app_password}
       - MARIADB_DATABASE=${MARIADB_DATABASE:-app}
     volumes:
-      - database_data:/bitnami/mariadb
+      - database_data:/var/lib/mysql
     networks:
       - project_network
     ports:
