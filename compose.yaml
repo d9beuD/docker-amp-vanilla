@@ -20,7 +20,7 @@ services:
   ###< doctrine/doctrine-bundle ###
 
   phpmyadmin:
-    image: phpmyadmin:5.2.1
+    image: phpmyadmin:5.2.2
     container_name: project-phpmyadmin
     ports:
       - 8080:80
