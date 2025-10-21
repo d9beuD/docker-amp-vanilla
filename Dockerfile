@@ -1,4 +1,4 @@
-FROM php:8.3.11-apache
+FROM php:8.4.13-apache
 
 WORKDIR /var/www
 ENV DEBIAN_FRONTEND=noninteractive
